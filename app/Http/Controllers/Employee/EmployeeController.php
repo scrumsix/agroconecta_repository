@@ -3,68 +3,78 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
-use App\Models\Usuario; // <-- CORREGIDO: Usamos tu modelo Usuario
+use App\Models\Employee; // We make sure to import the correct model
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
     /**
-     * Muestra una lista de todos los recursos (empleados/usuarios).
+     * Display a listing of the resource.
+     * Muestra la lista de todos los empleados.
      */
     public function index()
     {
-        // 1. Obtiene todos los registros de la tabla 'usuarios' usando el modelo
-        $employees = Usuario::all();
+        // This line now queries the correct model: Employee
+        $employees = Employee::all();
 
-        // 2. Devuelve la vista y le pasa la variable con todos los datos
+        // This part remains the same
         return view('employee.index', compact('employees'));
     }
 
     /**
-     * Muestra el formulario para crear un nuevo recurso.
+     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo empleado.
      */
     public function create()
     {
-        // Aquí irá la lógica para mostrar el formulario de creación
+        // This function simply shows the view we already created
+        return view('employee.create');
     }
 
     /**
+     * Store a newly created resource in storage.
      * Guarda el nuevo recurso en la base de datos.
      */
     public function store(Request $request)
     {
-        // Aquí irá la lógica para guardar un nuevo empleado
+        // For now, we will just redirect to the list.
+        // We will add the saving logic later.
+        return redirect()->route('employee.index');
     }
 
     /**
+     * Display the specified resource.
      * Muestra un recurso específico.
      */
-    public function show(Usuario $usuario) // <-- CORREGIDO
+    public function show(Employee $employee)
     {
-        // Aquí puedes mostrar los detalles de un solo empleado
+        // Logic to show a single employee's details will go here
     }
 
     /**
+     * Show the form for editing the specified resource.
      * Muestra el formulario para editar un recurso.
      */
-    public function edit(Usuario $usuario) // <-- CORREGIDO
+    public function edit(Employee $employee)
     {
-        // Aquí irá la lógica para mostrar el formulario de edición
+        // Logic to show the edit form will go here
     }
 
     /**
+     * Update the specified resource in storage.
      * Actualiza un recurso específico en la base de datos.
      */
-    public function update(Request $request, Usuario $usuario) // <-- CORREGIDO
+    public function update(Request $request, Employee $employee)
     {
-        // Aquí irá la lógica para actualizar el empleado
+        // Logic to update the employee will go here
     }
 
     /**
+     * Remove the specified resource from storage.
      * Elimina un recurso específico de la base de datos.
      */
-    public function destroy(Usuario $usuario) // <-- CORREGIDO
+    public function destroy(Employee $employee)
     {
-        // Aquí irá la lógica para eliminar el empleado
+        // Logic to delete the employee will go here
     }
 }

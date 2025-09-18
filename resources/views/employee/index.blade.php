@@ -8,36 +8,33 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+
+                <div class="mb-4">
+                    <a href="{{ route('employee.create') }}" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                        Añadir Empleado
+                    </a>
+                </div>
+
+                <table id="employees" class="display" style="width:100%">
+                    <thead>
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Nombre
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Apellido
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Email
-                            </th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
+                            <th>Rol</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($employees as $emp)
+                    <tbody>
+                        @forelse($employees as $employee)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ $emp->first_name }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ $emp->last_name }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ $emp->email }}
-                                </td>
+                                <td>{{ $employee->first_name }}</td>
+                                <td>{{ $employee->last_name }}</td>
+                                <td>{{ $employee->email }}</td>
+                                <td>{{ $employee->job_title ?? 'Sin Rol Asignado' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
+                                <td colspan="4" class="text-center text-gray-500">
                                     No se encontraron empleados.
                                 </td>
                             </tr>
@@ -47,4 +44,28 @@
             </div>
         </div>
     </div>
+
+    {{-- Scripts de jQuery y DataTables (CDN) --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script>
+        $(function() {
+            $('#employees').DataTable({
+                pageLength: 10, // Muestra 10 registros por página por defecto
+                dom: 'Bfrtip',
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+                },
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            });
+        });
+    </script>
 </x-app-layout>
