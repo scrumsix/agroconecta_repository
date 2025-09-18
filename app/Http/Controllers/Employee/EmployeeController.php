@@ -3,78 +3,71 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
-use App\Models\Employee; // We make sure to import the correct model
+use App\Models\Employee;
+use App\Http\Requests\StoreEmployeeRequest; // ¡IMPORTANTE! Importamos el validador.
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
     /**
-     * Display a listing of the resource.
      * Muestra la lista de todos los empleados.
      */
     public function index()
     {
-        // This line now queries the correct model: Employee
         $employees = Employee::all();
-
-        // This part remains the same
         return view('employee.index', compact('employees'));
     }
 
     /**
-     * Show the form for creating a new resource.
      * Muestra el formulario para crear un nuevo empleado.
      */
     public function create()
     {
-        // This function simply shows the view we already created
         return view('employee.create');
     }
 
     /**
-     * Store a newly created resource in storage.
-     * Guarda el nuevo recurso en la base de datos.
+     * Guarda el nuevo empleado en la base de datos.
      */
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request)
     {
-        // For now, we will just redirect to the list.
-        // We will add the saving logic later.
-        return redirect()->route('employee.index');
+        // 1. La validación se ejecuta automáticamente gracias a StoreEmployeeRequest.
+        // 2. Si la validación es exitosa, creamos el empleado con los datos limpios.
+        Employee::create($request->validated());
+
+        // 3. Redirigimos al listado con un mensaje de éxito.
+        return redirect()->route('employee.index')->with('ok', 'Empleado creado exitosamente.');
     }
 
     /**
-     * Display the specified resource.
      * Muestra un recurso específico.
      */
     public function show(Employee $employee)
     {
-        // Logic to show a single employee's details will go here
+        // Lógica para mostrar un solo empleado (lo implementaremos más adelante).
     }
 
     /**
-     * Show the form for editing the specified resource.
      * Muestra el formulario para editar un recurso.
      */
     public function edit(Employee $employee)
     {
-        // Logic to show the edit form will go here
+        // Lógica para mostrar el formulario de edición (lo implementaremos más adelante).
     }
 
     /**
-     * Update the specified resource in storage.
      * Actualiza un recurso específico en la base de datos.
      */
     public function update(Request $request, Employee $employee)
     {
-        // Logic to update the employee will go here
+        // Lógica para actualizar (lo implementaremos más adelante).
     }
 
     /**
-     * Remove the specified resource from storage.
      * Elimina un recurso específico de la base de datos.
      */
     public function destroy(Employee $employee)
     {
-        // Logic to delete the employee will go here
+        // Lógica para eliminar (lo implementaremos más adelante).
     }
 }
