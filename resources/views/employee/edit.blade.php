@@ -8,11 +8,12 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-                
+
                 <form action="{{ route('employee.update', $employee) }}" method="POST">
                     @csrf
                     @method('PUT')
 
+                    {{-- Esta línea llama al formulario y le pasa los datos --}}
                     @include('employee._form')
 
                     <div class="mt-6 flex justify-end">
@@ -29,4 +30,3 @@
         </div>
     </div>
 </x-app-layout>
-

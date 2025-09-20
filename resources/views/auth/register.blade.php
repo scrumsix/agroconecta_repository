@@ -28,6 +28,17 @@
                 <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
                 <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             </div>
+            
+<!-- Selector de Rol -->
+<div class="mt-4">
+    <x-label for="role" value="{{ __('Tipo de Usuario') }}" />
+    <select id="role" name="role" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+        <option value="cliente">Soy Cliente (Comprador)</option>
+        <option value="campesino">Soy Campesino (Vendedor)</option>
+        <option value="repartidor">Soy Repartidor</option>
+    </select>
+</div>
+<!-- Fin del Selector de Rol -->
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                 <div class="mt-4">

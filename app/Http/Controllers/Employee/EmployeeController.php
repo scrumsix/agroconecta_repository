@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
-use App\Http\Requests\StoreEmployeeRequest; // ¡IMPORTANTE! Importamos el validador.
+use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest; // ¡ESTA ES LA LÍNEA CLAVE QUE FALTABA!
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -31,43 +32,43 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
-        // 1. La validación se ejecuta automáticamente gracias a StoreEmployeeRequest.
-        // 2. Si la validación es exitosa, creamos el empleado con los datos limpios.
         Employee::create($request->validated());
-
-        // 3. Redirigimos al listado con un mensaje de éxito.
         return redirect()->route('employee.index')->with('ok', 'Empleado creado exitosamente.');
     }
 
     /**
-     * Muestra un recurso específico.
+     * Display the specified resource.
+     * (No lo usaremos por ahora)
      */
     public function show(Employee $employee)
     {
-        // Lógica para mostrar un solo empleado (lo implementaremos más adelante).
+        //
     }
 
     /**
-     * Muestra el formulario para editar un recurso.
+     * Muestra el formulario para editar un empleado existente.
      */
     public function edit(Employee $employee)
     {
-        // Lógica para mostrar el formulario de edición (lo implementaremos más adelante).
+        return view('employee.edit', compact('employee'));
     }
 
     /**
-     * Actualiza un recurso específico en la base de datos.
+     * Actualiza el empleado en la base de datos.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
-        // Lógica para actualizar (lo implementaremos más adelante).
+        $employee->update($request->validated());
+        return redirect()->route('employee.index')->with('ok', 'Empleado actualizado exitosamente.');
     }
 
     /**
-     * Elimina un recurso específico de la base de datos.
+     * Elimina un empleado de la base de datos.
      */
     public function destroy(Employee $employee)
     {
-        // Lógica para eliminar (lo implementaremos más adelante).
+        $employee->delete();
+        return redirect()->route('employee.index')->with('ok', 'Empleado eliminado exitosamente.');
     }
 }
+
