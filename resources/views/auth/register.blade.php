@@ -31,12 +31,12 @@
             
 <!-- Selector de Rol -->
 <div class="mt-4">
-    <x-label for="role" value="{{ __('Tipo de Usuario') }}" />
+    <x-label for="role" value="{{ __('Quiero registrarme como:') }}" />
     <select id="role" name="role" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-        <option value="cliente">Soy Cliente (Comprador)</option>
-        <option value="campesino">Soy Campesino (Vendedor)</option>
-        <option value="repartidor">Soy Repartidor</option>
-    </select>
+        <option value="cliente">Cliente (Comprador)</option>
+        <option value="campesino">Campesino (Vendedor)</option>
+        <option value="repartidor">Repartidor</option>
+        </select>
 </div>
 <!-- Fin del Selector de Rol -->
 

@@ -10,13 +10,12 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('users', function (Blueprint $table) {
-        // Añadimos la columna 'role' después de la columna 'email'
-        // default('cliente') significa que si no se especifica, será un cliente.
-        $table->string('role')->after('email')->default('cliente');
-    });
-}
+    {
+        Schema::table('users', function (Blueprint $table) {
+            // Por defecto, cualquier usuario nuevo será un 'cliente'.
+            $table->string('role')->after('email')->default('cliente');
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -24,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            // Elimina la columna 'role' si se revierte la migración.
+            $table->dropColumn('role');
         });
     }
 };

@@ -19,13 +19,14 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
-    public function create(array $input): User
+   public function create(array $input): User
 {
     Validator::make($input, [
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'password' => $this->passwordRules(),
-        'role' => ['required', 'string', Rule::in(['cliente', 'campesino', 'repartidor'])], // Añadimos validación para el rol
+        // Añadimos la validación para el rol
+        'role' => ['required', 'string', Rule::in(['cliente', 'campesino', 'repartidor'])],
         'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
     ])->validate();
 
@@ -33,7 +34,7 @@ class CreateNewUser implements CreatesNewUsers
         'name' => $input['name'],
         'email' => $input['email'],
         'password' => Hash::make($input['password']),
-        'role' => $input['role'], // <-- AÑADIR ESTA LÍNEA ES CLAVE
+        'role' => $input['role'], // <-- AÑADIMOS LA LÓGICA DE GUARDADO
     ]);
 }
 }
