@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UserController; // Importamos el controlador del Admin
+use App\Http\Controllers\Admin\UserController; // Se importa el controlador del Admin
 
 /*
 |--------------------------------------------------------------------------
@@ -32,17 +32,30 @@ Route::middleware([
 
 
 // --- RUTAS DEL PANEL DE ADMINISTRACIÓN ---
-// Este grupo de rutas está doblemente protegido:
-// 1. El usuario debe haber iniciado sesión ('auth:sanctum', 'verified')
-// 2. El usuario debe tener el rol de 'admin' ('admin')
+// Este grupo de rutas está protegido por el middleware 'auth' y 'admin'.
 Route::middleware(['auth:sanctum', 'verified', 'admin'])
     ->prefix('admin') // Todas las URLs de este grupo empezarán con /admin/...
-    ->name('admin.') // Todos los nombres de ruta empezarán con admin....
+    ->name('admin.')   // Todos los nombres de ruta empezarán con admin....
     ->group(function () {
-    
+
     // Crea todas las rutas necesarias para el CRUD de Usuarios
     // (admin.users.index, admin.users.create, admin.users.store, etc.)
     Route::resource('users', UserController::class);
+
+});
+
+// --- RUTAS DEL PANEL DEL CAMPESINO ---
+Route::middleware(['auth:sanctum', 'verified', 'campesino'])
+    ->prefix('campesino')
+    ->name('campesino.')
+    ->group(function () {
+
+    Route::get('/dashboard', function () {
+        return "Bienvenido al panel del Campesino";
+    })->name('dashboard');
+
+    //  AÑADE ESTA LÍNEA PARA EL CRUD DE PRODUCTOS 
+    Route::resource('productos', \App\Http\Controllers\Campesino\ProductController::class);
 
 });
 

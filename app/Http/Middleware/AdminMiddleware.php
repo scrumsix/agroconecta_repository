@@ -16,13 +16,13 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // 1. Revisa si el usuario está autenticado Y si su rol es 'admin'.
+        // Revisa si el usuario ha iniciado sesión Y si su rol es 'admin'.
         if (Auth::check() && Auth::user()->role == 'admin') {
-            // 2. Si cumple, déjalo pasar a la ruta solicitada.
+            // Si cumple, déjalo pasar.
             return $next($request);
         }
 
-        // 3. Si no cumple, redirígelo al dashboard general con un mensaje de error.
-        return redirect('/dashboard')->with('error', 'No tienes permiso para acceder a esta sección.');
+        // Si no cumple, patéalo al dashboard general con un mensaje de error.
+        return redirect('/dashboard')->with('error', 'No tienes permiso para acceder aquí.');
     }
 }

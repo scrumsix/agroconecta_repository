@@ -12,7 +12,11 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable;
+    use HasApiTokens;
+    use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,11 +24,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'role', 
-];
+        'name',
+        'email',
+        'password',
+        'role', // <-- Asegúrate de que 'role' esté aquí si lo añadiste en el registro
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,7 +45,7 @@ class User extends Authenticatable
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array<string, string>
+     * @var array<int, string>
      */
     protected $appends = [
         'profile_photo_url',
@@ -59,4 +63,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-}
+
+    /**
+     * Un usuario (campesino) tiene muchos productos.
+     */
+    public function products()
+    {
+        return $this->hasMany(\App\Models\Product::class);
+    }
+    
+} // <-- LA LLAVE DE CIERRE QUE PROBABLEMENTE FALTABA
