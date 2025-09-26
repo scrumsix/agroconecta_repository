@@ -25,6 +25,12 @@
                 </div>
             </div>
 
+            @if (Auth::user()->role == 'campesino')
+    <x-nav-link :href="route('campesino.productos.index')" :active="request()->routeIs('campesino.productos.*')">
+        {{ __('Mis Productos') }}
+    </x-nav-link>
+@endif
+
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
@@ -157,6 +163,8 @@
                 </x-responsive-nav-link>
             @endif
         </div>
+
+        
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

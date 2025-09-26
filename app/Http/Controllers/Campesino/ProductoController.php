@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ProductoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,7 +31,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validar los datos del formulario
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -39,13 +38,9 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
         ]);
 
-        // 2. Añadir el ID del campesino autenticado a los datos validados
         $data = array_merge($validated, ['user_id' => auth()->id()]);
+        Product::create($data);
 
-        // 3. Crear el producto en la base de datos
-        \App\Models\Product::create($data);
-
-        // 4. Redirigir a la lista de productos con un mensaje de éxito
         return redirect()->route('campesino.productos.index')->with('ok', 'Producto creado exitosamente.');
     }
 
@@ -58,10 +53,11 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar un usuario existente.
      */
-    public function edit(Product $product)
+    public function edit(Product $product) // Usamos $product en lugar de $producto
     {
+        // Pasamos la variable 'product' a la vista
         return view('campesino.products.edit', compact('product'));
     }
 
@@ -80,13 +76,17 @@ class ProductController extends Controller
         $product->update($validated);
 
         return redirect()->route('campesino.productos.index')->with('ok', 'Producto actualizado exitosamente.');
-    } // <-- La llave de cierre del método update está aquí.
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(\App\Models\Product $producto)
     {
-        //
+        // 1. Elimina el producto de la base de datos.
+        $producto->delete();
+
+        // 2. Redirige de vuelta a la lista con un mensaje de éxito.
+        return redirect()->route('campesino.productos.index')->with('ok', 'Producto eliminado exitosamente.');
     }
-} // <-- Y la llave de cierre final de la clase está aquí.
+}

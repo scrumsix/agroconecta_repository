@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController; // Se importa el controlador del Admin
+use App\Http\Controllers\ShopController; // <-- Es una buena práctica importar el controlador aquí
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,20 @@ use App\Http\Controllers\Admin\UserController; // Se importa el controlador del 
 |
 */
 
+// --- RUTAS PÚBLICAS ---
+
 // Ruta para la página de bienvenida pública
 Route::get('/', function () {
     return view('welcome');
 });
+
+// --- RUTAS DE LA TIENDA PÚBLICA ---
+// Estas rutas son públicas y no requieren inicio de sesión.
+Route::get('/tienda', [ShopController::class, 'index'])->name('tienda.index');
+Route::get('/tienda/{product}', [ShopController::class, 'show'])->name('tienda.show'); // <-- AÑADIDO
+
+
+// --- RUTAS PRIVADAS ---
 
 // Rutas que requieren que el usuario haya iniciado sesión (Dashboard, etc.)
 Route::middleware([
@@ -54,8 +65,8 @@ Route::middleware(['auth:sanctum', 'verified', 'campesino'])
         return "Bienvenido al panel del Campesino";
     })->name('dashboard');
 
-    //  AÑADE ESTA LÍNEA PARA EL CRUD DE PRODUCTOS 
-    Route::resource('productos', \App\Http\Controllers\Campesino\ProductController::class);
+    //  AÑADE ESTA LÍNEA PARA EL CRUD DE PRODUCTOS
+    Route::resource('productos', \App\Http\Controllers\Campesino\ProductoController::class);
 
 });
 

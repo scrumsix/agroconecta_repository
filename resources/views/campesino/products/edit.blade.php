@@ -1,64 +1,88 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Editar Producto') }}
-        </h2>
-    </x-slot>
+<?php
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+namespace App\Http\Controllers\Campesino;
 
-                {{-- Muestra errores de validación si existen --}}
-                @if ($errors->any())
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                        <strong class="font-bold">¡Ups! Hubo algunos problemas con tu entrada.</strong>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+use App\Http\Controllers\Controller;
+use App\Models\Product;
+use Illuminate\Http\Request;
 
-                {{-- INICIO DEL FORMULARIO --}}
-                <form action="{{ route('campesino.productos.update', $product) }}" method="POST">
-                    @csrf {{-- Token de seguridad de Laravel --}}
-                    @method('PUT') {{-- IMPORTANTE: Directiva para actualizar --}}
+class ProductController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $user = auth()->user();
+        $products = $user->products;
+        return view('campesino.products.index', compact('products'));
+    }
 
-                    <div class="mb-4">
-                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nombre del Producto:</label>
-                        {{-- El value ahora muestra los datos del producto --}}
-                        <input type="text" name="name" id="name" value="{{ old('name', $product->name) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    </div>
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('campesino.products.create');
+    }
 
-                    <div class="mb-4">
-                        <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Descripción (opcional):</label>
-                        <textarea name="description" id="description" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('description', $product->description) }}</textarea>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
-                        <input type="number" name="price" id="price" value="{{ old('price', $product->price) }}" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    </div>
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+        ]);
 
-                    <div class="mb-4">
-                        <label for="stock" class="block text-gray-700 text-sm font-bold mb-2">Stock (unidades disponibles):</label>
-                        <input type="number" name="stock" id="stock" value="{{ old('stock', $product->stock) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    </div>
+        $data = array_merge($validated, ['user_id' => auth()->id()]);
+        Product::create($data);
 
-                    <div class="flex items-center justify-between">
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Actualizar Producto
-                        </button>
-                        <a href="{{ route('campesino.productos.index') }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-                            Cancelar
-                        </a>
-                    </div>
-                </form>
-                {{-- FIN DEL FORMULARIO --}}
+        return redirect()->route('campesino.productos.index')->with('ok', 'Producto creado exitosamente.');
+    }
 
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+    /**
+     * Display the specified resource.
+     */
+    public function show(Product $product)
+    {
+        //
+    }
+
+    /**
+     * Muestra el formulario para editar un usuario existente.
+     */
+    public function edit(Product $producto) // <-- CAMBIO APLICADO
+    {
+        // Pasamos la variable 'product' a la vista
+        return view('campesino.products.edit', ['product' => $producto]); // <-- Y AQUÍ
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Product $producto) // <-- CAMBIO APLICADO
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+        ]);
+
+        $producto->update($validated); // <-- Y AQUÍ
+
+        return redirect()->route('campesino.productos.index')->with('ok', 'Producto actualizado exitosamente.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Product $product)
+    {
+        //
+    }
+}
