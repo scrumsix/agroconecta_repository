@@ -58,7 +58,6 @@
                         <select name="role" id="role" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                             <option value="cliente">Cliente (Comprador)</option>
                             <option value="campesino">Campesino (Vendedor)</option>
-                            <option value="repartidor">Repartidor</option>
                         </select>
                     </div>
 

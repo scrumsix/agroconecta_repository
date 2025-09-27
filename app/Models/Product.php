@@ -13,11 +13,12 @@ class Product extends Model
      * Los atributos que se pueden asignar masivamente.
      */
     protected $fillable = [
-        'user_id',
-        'name',
-        'description',
-        'price',
-        'stock',
+    'user_id',
+    'name',
+    'description',
+    'price',
+    'stock',
+    'image',
     ];
 
     /**

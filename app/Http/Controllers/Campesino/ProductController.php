@@ -7,7 +7,6 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-// El nombre de la clase ha sido corregido a "ProductController"
 class ProductController extends Controller
 {
     /**
@@ -67,7 +66,7 @@ class ProductController extends Controller
     /**
      * Muestra el formulario para editar un usuario existente.
      */
-    public function edit(Product $product)
+    public function edit(Product $product) // Usamos $product en lugar de $producto
     {
         // Pasamos la variable 'product' a la vista
         return view('campesino.products.edit', compact('product'));
@@ -105,17 +104,17 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $producto)
     {
         // Si el producto tiene una imagen, la borramos del almacenamiento.
-        if ($product->image) {
-            Storage::delete('public/' . $product->image);
+        if ($producto->image) {
+            Storage::delete('public/' . $producto->image);
         }
 
-        // Elimina el producto de la base de datos.
-        $product->delete();
+        // 1. Elimina el producto de la base de datos.
+        $producto->delete();
 
-        // Redirige de vuelta a la lista con un mensaje de éxito.
+        // 2. Redirige de vuelta a la lista con un mensaje de éxito.
         return redirect()->route('campesino.productos.index')->with('ok', 'Producto eliminado exitosamente.');
     }
 }

@@ -13,7 +13,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Columna de la Imagen --}}
                     <div>
-                        <img class="w-full h-auto object-cover rounded-lg shadow-md" src="https://via.placeholder.com/600x400.png?text=Producto" alt="Imagen del producto">
+<img class="w-full h-auto object-cover rounded-lg shadow-md" src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/600x400.png?text=Sin+Imagen' }}" alt="Imagen de {{ $product->name }}">
                     </div>
 
                     {{-- Columna de los Detalles --}}
