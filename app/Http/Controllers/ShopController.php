@@ -15,7 +15,7 @@ class ShopController extends Controller
         // 1. Obtiene todos los productos de la base de datos.
         // Usamos with('user') para cargar también la información del campesino
         // que lo creó y así evitar problemas de rendimiento (Eager Loading).
-        $products = Product::with('user')->get();
+        $products = Product::with('user')->latest()->paginate(12);
 
         // 2. Devuelve la vista 'tienda.index' (que crearemos a continuación)
         // y le pasa la variable 'products' para que se puedan mostrar.

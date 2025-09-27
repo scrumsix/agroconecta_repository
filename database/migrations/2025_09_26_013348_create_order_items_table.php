@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id')->constrained()->onDelete('cascade'); // Enlace al pedido
+            $table->foreignId('product_id')->constrained()->onDelete('cascade'); // Enlace al producto
+            $table->integer('quantity'); // Cantidad comprada
+            $table->decimal('price', 8, 2); // Precio del producto al momento de la compra
             $table->timestamps();
         });
     }

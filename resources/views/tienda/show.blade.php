@@ -38,13 +38,16 @@
                         </div>
                         
                         <div class="mt-6">
-                            {{-- Este botón será para el carrito de compras más adelante --}}
-                            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                Añadir al Carrito
-                            </button>
-                            <a href="{{ route('tienda.index') }}" class="ml-4 text-gray-500 hover:text-gray-700">
-                                Volver a la tienda
-                            </a>
+                             {{--  ESTE BLOQUE HA SIDO REEMPLAZADO --}}
+                            <form action="{{ route('cart.add', $product) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    Añadir al Carrito
+                                </button>
+                                <a href="{{ route('tienda.index') }}" class="ml-4 text-gray-500 hover:text-gray-700">
+                                    Volver a la tienda
+                                </a>
+                            </form>
                         </div>
                     </div>
                 </div>

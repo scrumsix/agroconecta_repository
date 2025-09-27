@@ -1,88 +1,22 @@
-<?php
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Editar Producto') }}
+        </h2>
+    </x-slot>
 
-namespace App\Http\Controllers\Campesino;
-
-use App\Http\Controllers\Controller;
-use App\Models\Product;
-use Illuminate\Http\Request;
-
-class ProductController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $user = auth()->user();
-        $products = $user->products;
-        return view('campesino.products.index', compact('products'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('campesino.products.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-        ]);
-
-        $data = array_merge($validated, ['user_id' => auth()->id()]);
-        Product::create($data);
-
-        return redirect()->route('campesino.productos.index')->with('ok', 'Producto creado exitosamente.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Muestra el formulario para editar un usuario existente.
-     */
-    public function edit(Product $producto) // <-- CAMBIO APLICADO
-    {
-        // Pasamos la variable 'product' a la vista
-        return view('campesino.products.edit', ['product' => $producto]); // <-- Y AQUÍ
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Product $producto) // <-- CAMBIO APLICADO
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-        ]);
-
-        $producto->update($validated); // <-- Y AQUÍ
-
-        return redirect()->route('campesino.productos.index')->with('ok', 'Producto actualizado exitosamente.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        //
-    }
-}
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+                <form action="{{ route('campesino.productos.update', $product) }}" method="POST" enctype="multipart/form-data">
+                    @method('PUT')
+                    @include('campesino.products._form')
+                    <div class="flex items-center justify-end mt-4">
+                        <a href="{{ route('campesino.productos.index') }}" class="text-gray-600 hover:text-gray-900 mr-4">Cancelar</a>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Actualizar Producto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

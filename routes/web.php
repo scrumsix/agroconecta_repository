@@ -1,72 +1,64 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UserController; // Se importa el controlador del Admin
-use App\Http\Controllers\ShopController; // <-- Es una buena práctica importar el controlador aquí
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Campesino\ProductController; // <-- Se importa el controlador correcto
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
 // --- RUTAS PÚBLICAS ---
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Ruta para la página de bienvenida pública
-Route::get('/', function () {
-    return view('welcome');
-});
-
-// --- RUTAS DE LA TIENDA PÚBLICA ---
-// Estas rutas son públicas y no requieren inicio de sesión.
 Route::get('/tienda', [ShopController::class, 'index'])->name('tienda.index');
-Route::get('/tienda/{product}', [ShopController::class, 'show'])->name('tienda.show'); // <-- AÑADIDO
+Route::get('/tienda/{product}', [ShopController::class, 'show'])->name('tienda.show');
 
 
-// --- RUTAS PRIVADAS ---
-
-// Rutas que requieren que el usuario haya iniciado sesión (Dashboard, etc.)
+// --- RUTAS PARA USUARIOS AUTENTICADOS ---
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // --- RUTA DE MIS PEDIDOS ---
+    Route::get('/mis-pedidos', [OrderController::class, 'index'])->name('orders.index');
+
+    // --- RUTAS DEL CARRITO DE COMPRAS ---
+    Route::post('/carrito/añadir/{product}', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/carrito/eliminar/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 });
 
 
 // --- RUTAS DEL PANEL DE ADMINISTRACIÓN ---
-// Este grupo de rutas está protegido por el middleware 'auth' y 'admin'.
 Route::middleware(['auth:sanctum', 'verified', 'admin'])
-    ->prefix('admin') // Todas las URLs de este grupo empezarán con /admin/...
-    ->name('admin.')   // Todos los nombres de ruta empezarán con admin....
+    ->prefix('admin')
+    ->name('admin.')
     ->group(function () {
-
-    // Crea todas las rutas necesarias para el CRUD de Usuarios
-    // (admin.users.index, admin.users.create, admin.users.store, etc.)
-    Route::resource('users', UserController::class);
-
-});
+        Route::resource('users', UserController::class);
+    });
 
 // --- RUTAS DEL PANEL DEL CAMPESINO ---
 Route::middleware(['auth:sanctum', 'verified', 'campesino'])
     ->prefix('campesino')
     ->name('campesino.')
     ->group(function () {
-
-    Route::get('/dashboard', function () {
-        return "Bienvenido al panel del Campesino";
-    })->name('dashboard');
-
-    //  AÑADE ESTA LÍNEA PARA EL CRUD DE PRODUCTOS
-    Route::resource('productos', \App\Http\Controllers\Campesino\ProductoController::class);
-
-});
+        Route::get('/dashboard', function () {
+            return "Bienvenido al panel del Campesino";
+        })->name('dashboard');
+        
+        // La ruta ahora apunta al controlador con el nombre correcto "ProductController"
+        Route::resource('productos', ProductController::class);
+    });
 

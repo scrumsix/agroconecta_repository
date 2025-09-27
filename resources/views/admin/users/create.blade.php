@@ -8,18 +8,16 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-                
+
                 <form action="{{ route('admin.users.store') }}" method="POST">
                     
-                    {{-- Aquí incluimos el formulario reutilizable --}}
+                    {{-- Incluimos el formulario parcial --}}
                     @include('admin.users._form')
 
-                    <div class="mt-6 flex justify-end">
-                        <a href="{{ route('admin.users.index') }}" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-                            Cancelar
-                        </a>
-                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-                            Guardar Usuario
+                    <div class="flex items-center justify-end mt-6 border-t pt-4">
+                        <a href="{{ route('admin.users.index') }}" class="text-gray-600 hover:text-gray-900 mr-4">Cancelar</a>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-800 focus:outline-none focus:border-green-800 focus:ring focus:ring-green-200 disabled:opacity-25 transition">
+                            Crear Usuario
                         </button>
                     </div>
                 </form>

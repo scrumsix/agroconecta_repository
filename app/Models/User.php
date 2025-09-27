@@ -71,5 +71,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Product::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
     
 } // <-- LA LLAVE DE CIERRE QUE PROBABLEMENTE FALTABA
