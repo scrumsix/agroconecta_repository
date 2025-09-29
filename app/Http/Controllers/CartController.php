@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; // <-- LÍNEA AÑADIDA
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -123,6 +123,30 @@ class CartController extends Controller
             // 10. Redirige con un mensaje de error.
             return redirect()->route('cart.index')->with('error', 'Hubo un error al procesar tu pedido. Por favor, intenta de nuevo.');
         }
+    }
+
+    /**
+     * Actualiza la cantidad de un ítem en el carrito.
+     */
+    public function update(Request $request, $id)
+    {
+        $cart = session()->get('cart', []);
+
+        // Valida que la cantidad sea un número válido y al menos 1.
+        $request->validate(['quantity' => 'required|integer|min:1']);
+
+        // Revisa si el producto existe en el carrito.
+        if(isset($cart[$id])) {
+            // Actualiza la cantidad.
+            $cart[$id]['quantity'] = $request->quantity;
+
+            // Guarda el carrito de vuelta en la sesión.
+            session()->put('cart', $cart);
+
+            return redirect()->back()->with('ok', 'Cantidad actualizada correctamente.');
+        }
+
+        return redirect()->back()->with('error', 'No se pudo actualizar el producto.');
     }
 }
 

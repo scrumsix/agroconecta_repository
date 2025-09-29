@@ -12,12 +12,16 @@
                     {{-- Usamos el formulario parcial --}}
                     @include('campesino.products._form')
                     
-                    <div class="flex items-center justify-end mt-4">
+                    {{-- ESTA ES LA SECCIÓN DE BOTONES ACTUALIZADA  --}}
+                    <div class="flex items-center justify-end mt-6 border-t pt-4">
                         <a href="{{ route('campesino.productos.index') }}" class="text-gray-600 hover:text-gray-900 mr-4">Cancelar</a>
-                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Guardar Producto</button>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700">
+                            Guardar Producto
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </x-app-layout>
+

@@ -33,13 +33,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validar los datos, incluyendo la imagen.
+        // 1. Validar los datos con la regla 'in' para la unidad.
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'unit' => 'required|string|in:Kg,Libra,Paquete,Unidad',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Regla para la imagen
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         // 2. Si se subió una imagen, la guardamos.
@@ -66,37 +67,48 @@ class ProductController extends Controller
     /**
      * Muestra el formulario para editar un usuario existente.
      */
-    public function edit(Product $product) // Usamos $product en lugar de $producto
+    public function edit(\App\Models\Product $producto)
     {
-        // Pasamos la variable 'product' a la vista
-        return view('campesino.products.edit', compact('product'));
+        // Pasamos la variable 'producto' a la vista
+        return view('campesino.products.edit', compact('producto'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, \App\Models\Product $producto)
     {
+        // La validación sigue siendo exactamente la misma
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'unit' => 'required|string|in:Kg,Libra,Paquete,Unidad',
             'stock' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Si se sube una imagen nueva...
+        // --- INICIO DEL CAMBIO: ACTUALIZACIÓN MANUAL ---
+
+        // Asignamos cada valor validado al modelo, uno por uno.
+        $producto->name = $validated['name'];
+        $producto->description = $validated['description'];
+        $producto->price = $validated['price'];
+        $producto->unit = $validated['unit'];
+        $producto->stock = $validated['stock'];
+
+        // Manejo de la imagen (sigue igual que antes)
         if ($request->hasFile('image')) {
-            // ...borramos la imagen antigua si existe.
-            if ($product->image) {
-                Storage::delete('public/' . $product->image);
+            if ($producto->image) {
+                \Illuminate\Support\Facades\Storage::delete('public/' . $producto->image);
             }
-            // Guardamos la nueva imagen y actualizamos la ruta.
-            $validated['image'] = $request->file('image')->store('products', 'public');
+            $producto->image = $request->file('image')->store('products', 'public');
         }
 
-        // Actualizamos el producto con los datos validados.
-        $product->update($validated);
+        // Finalmente, guardamos todos los cambios en la base de datos.
+        $producto->save();
+
+        // --- FIN DEL CAMBIO ---
 
         return redirect()->route('campesino.productos.index')->with('ok', 'Producto actualizado exitosamente.');
     }

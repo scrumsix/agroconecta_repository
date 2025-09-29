@@ -13,14 +13,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Columna de la Imagen --}}
                     <div>
-<img class="w-full h-auto object-cover rounded-lg shadow-md" src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/600x400.png?text=Sin+Imagen' }}" alt="Imagen de {{ $product->name }}">
+                        <img class="w-full h-auto object-cover rounded-lg shadow-md" src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/600x400.png?text=Sin+Imagen' }}" alt="Imagen de {{ $product->name }}">
                     </div>
 
                     {{-- Columna de los Detalles --}}
                     <div>
                         <h1 class="text-3xl font-bold mb-4">{{ $product->name }}</h1>
                         
-                        <p class="text-2xl text-gray-700 mb-4">${{ number_format($product->price, 2) }}</p>
+                        {{-- 👇 ESTA ES LA LÍNEA ACTUALIZADA 👇 --}}
+                        <p class="text-2xl text-gray-700 mb-4">${{ number_format($product->price, 2) }} / {{ $product->unit }}</p>
                         
                         <p class="text-gray-600 mb-4">
                             <span class="font-bold">Vendido por:</span> {{ $product->user->name }}
@@ -38,8 +39,7 @@
                         </div>
                         
                         <div class="mt-6">
-                             {{--  ESTE BLOQUE HA SIDO REEMPLAZADO --}}
-                            <form action="{{ route('cart.add', $product) }}" method="POST">
+                             <form action="{{ route('cart.add', $product) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                                     Añadir al Carrito
@@ -56,3 +56,4 @@
         </div>
     </div>
 </x-app-layout>
+

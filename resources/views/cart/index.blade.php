@@ -33,7 +33,17 @@
                                 <tr>
                                     <td class="px-6 py-4">{{ $details['name'] }}</td>
                                     <td class="px-6 py-4">${{ number_format($details['price'], 2) }}</td>
-                                    <td class="px-6 py-4">{{ $details['quantity'] }}</td>
+                                    
+                                    {{-- 👇 ESTA ES LA CELDA ACTUALIZADA 👇 --}}
+                                    <td class="px-6 py-4">
+                                        <form action="{{ route('cart.update', $id) }}" method="POST" class="flex items-center">
+                                            @csrf
+                                            <input type="number" name="quantity" value="{{ $details['quantity'] }}" 
+                                                   class="w-20 text-center border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500" min="1">
+                                            <button type="submit" class="ml-2 text-sm text-indigo-600 hover:text-indigo-900 font-semibold">Actualizar</button>
+                                        </form>
+                                    </td>
+                                    
                                     <td class="px-6 py-4">${{ number_format($details['price'] * $details['quantity'], 2) }}</td>
                                     <td class="px-6 py-4">
                                         <form action="{{ route('cart.remove', $id) }}" method="POST">
@@ -48,7 +58,6 @@
 
                     <div class="text-right mt-6">
                         <p class="text-xl font-bold">Total: ${{ number_format($total, 2) }}</p>
-                        {{--  ESTE ES EL BLOQUE ACTUALIZADO  --}}
                         <form action="{{ route('cart.checkout') }}" method="POST">
                             @csrf
                             <button type="submit" class="mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

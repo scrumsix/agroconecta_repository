@@ -29,6 +29,7 @@
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Precio</th>
+                                <th>Unidad</th> {{-- <-- LÍNEA AÑADIDA --}}
                                 <th>Stock</th>
                                 <th>Acciones</th>
                             </tr>
@@ -39,6 +40,7 @@
                                     <td>{{ $product->id }}</td>
                                     <td>{{ $product->name }}</td>
                                     <td>${{ number_format($product->price, 2) }}</td>
+                                    <td>{{ $product->unit }}</td> {{-- <-- LÍNEA AÑADIDA --}}
                                     <td>{{ $product->stock }}</td>
                                     <td class="whitespace-nowrap">
                                         {{-- Botón Editar --}}

@@ -1,13 +1,16 @@
 <nav x-data="{ open: false }" class="bg-green-800 border-b border-green-900">
+    <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
+                <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <span class="text-white text-xl font-bold">AgroConecta</span>
                     </a>
                 </div>
 
+                <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex items-center">
                     {{-- ENLACES COMUNES --}}
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-green-200 hover:text-white">
@@ -61,9 +64,27 @@
                                 </button>
                             </span>
                         </x-slot>
+
+                        {{-- 👇 ESTE ES EL BLOQUE CORREGIDO 👇 --}}
                         <x-slot name="content">
-                            <x-dropdown-link href="{{ route('profile.show') }}"> {{ __('Profile') }} </x-dropdown-link>
-                            <form method="POST" action="{{ route('logout') }}" x-data><@csrf<x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();"> {{ __('Log Out') }} </x-dropdown-link></form>
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Manage Account') }}
+                            </div>
+
+                            <x-dropdown-link href="{{ route('profile.show') }}">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
+
+                            <div class="border-t border-gray-200"></div>
+
+                            <form method="POST" action="{{ route('logout') }}" x-data>
+                                @csrf
+
+                                <x-dropdown-link href="{{ route('logout') }}"
+                                         @click.prevent="$root.submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -80,3 +101,4 @@
         {{-- ... Código del menú responsivo ... --}}
     </div>
 </nav>
+

@@ -21,13 +21,14 @@
                 @forelse ($products as $product)
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
                         <a href="{{ route('tienda.show', $product) }}">
-                            {{-- 👇 ESTA ES LA LÍNEA ACTUALIZADA 👇 --}}
                             <img class="w-full h-48 object-cover" src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/400x300.png?text=Sin+Imagen' }}" alt="Imagen de {{ $product->name }}">
                         </a>
                         <div class="p-4">
                             <h3 class="text-lg font-bold text-gray-800">{{ $product->name }}</h3>
                             <p class="text-sm text-gray-500 mt-1">Vendido por: {{ $product->user->name }}</p>
-                            <p class="text-xl font-semibold text-green-600 mt-2">${{ number_format($product->price, 2) }}</p>
+                            
+                            {{-- 👇 ESTA ES LA LÍNEA ACTUALIZADA 👇 --}}
+                            <p class="text-xl font-semibold text-green-600 mt-2">${{ number_format($product->price, 2) }} / {{ $product->unit }}</p>
                             
                             <form action="{{ route('cart.add', $product) }}" method="POST" class="mt-4">
                                 @csrf
